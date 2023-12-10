@@ -12,12 +12,6 @@ const COUNTRIES =
         './data/ne_50m_admin_0_countries.geojson'; 
 const CITIES =         
         './data/ne_50m_populated_places.geojson';
-// const RIVERS =
-//         './data/ne_50m_rivers_lake_centerlines.geojson';
-// const LAKES =
-//         './data/ne_50m_lakes.geojson';
-
-
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -37,7 +31,6 @@ let response = await window.fetch('./data/ne_50m_populated_places.geojson');
 if (response.ok) { 
   let data = await response.json();
   var cities = coord(data);
-//   console.log(cities);
 }; 
 
 map.on('load', () => {
@@ -89,11 +82,6 @@ for (let i = 0; i < lineDistance; i += lineDistance / steps) {
 
 route.features[0].geometry.coordinates = arc;
 
-    // map.addSource('rivers', {
-    //     'type': 'geojson',
-    //     'data': RIVERS
-    // });
-
     map.addSource('city', {
         'type': 'geojson',
         'data': CITIES
@@ -124,16 +112,6 @@ route.features[0].geometry.coordinates = arc;
         }
     });
 
-    // map.addLayer({
-    //     'id': 'rivers',
-    //     'source': 'rivers',
-    //     'type': 'line',
-    //     'paint': {
-    //         'line-width': 2,
-    //         'line-color': '#007cbf'
-    //     }
-    // });
-    
     map.addLayer({
         'id': 'cities',
         'type': 'circle',
@@ -141,39 +119,8 @@ route.features[0].geometry.coordinates = arc;
         'paint': {
         'circle-radius': 4,
         'circle-color': '#6C6960',
-        // '#007cbf',
-        // '#' + (Math.random().toString(16) + "000000").substring(2, 8),
         }
         });
-
-        // different colors
-
-        // for (var i = 0; i < cities.length; i++) {
-        //     map.addLayer({
-        //       "id": "points" + i,
-        //       "type": "circle",
-        //       "paint": {
-        //         "circle-radius": 3,
-        //         "circle-color": '#' + (Math.random().toString(16) + "000000").substring(2, 8)
-        //       },
-        //       "source": {
-        //         "type": "geojson",
-        //         "data": {
-        //           "type": "FeatureCollection",
-        //           "features": [{
-        //             "type": "Feature",
-        //             "properties": {
-        //               "field": cities[i]
-        //             },
-        //             "geometry": {
-        //               "type": "Point",
-        //               "coordinates": [cities[i][0], cities[i][1]]
-        //             }
-        //           }]
-        //         }
-        //       }
-        //     });
-        //   }
 
         map.addLayer({
             'id': 'route',
@@ -202,7 +149,6 @@ route.features[0].geometry.coordinates = arc;
     let running = false;
     function animate() {
         running = true;
-        // document.getElementById('replay').disabled = true;
         const start =
             route.features[0].geometry.coordinates[
                 counter >= steps ? counter - 1 : counter
@@ -235,12 +181,8 @@ route.features[0].geometry.coordinates = arc;
     }
 
     document.getElementById('replay').addEventListener('click', () => {
-        // if (running) {
-        //     void 0;
-        // } else {
             origin = destination;
             destination = cities[getRandomInt(n)];
-            // cities[counter + getRandomInt(n - counter)];
 
             point.features[0].geometry.coordinates = origin;
             route.features[0].geometry.coordinates = [origin, destination];
@@ -267,70 +209,3 @@ route.features[0].geometry.coordinates = arc;
 
     animate(counter);
 });
-
-/*
-* https://deck.gl/docs/api-reference/aggregation-layers/hexagon-layer
-*/
-// const {DeckGL, HexagonLayer} = deck;
-
-// const layer = new HexagonLayer({
-//   id: 'HexagonLayer',
-//   data: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/sf-bike-parking.json',
-  
-//   /* props from HexagonLayer class */
-  
-//   // colorAggregation: 'SUM',
-//   // colorDomain: null,
-//   // colorRange: [[255, 255, 178], [254, 217, 118], [254, 178, 76], [253, 141, 60], [240, 59, 32], [189, 0, 38]],
-//   // colorScaleType: 'quantize',
-//   // coverage: 1,
-//   // elevationAggregation: 'SUM',
-//   // elevationDomain: null,
-//   // elevationLowerPercentile: 0,
-//   // elevationRange: [0, 1000],
-//   elevationScale: 4,
-//   // elevationScaleType: 'linear',
-//   // elevationUpperPercentile: 100,
-//   extruded: true,
-//   // getColorValue: null,
-//   // getColorWeight: 1,
-//   // getElevationValue: null,
-//   // getElevationWeight: 1,
-//   getPosition: d => d.COORDINATES,
-//   // hexagonAggregator: null,
-//   // lowerPercentile: 0,
-//   // material: true,
-//   // onSetColorDomain: null,
-//   // onSetElevationDomain: null,
-//   radius: 200,
-//   // upperPercentile: 100,
-  
-//   /* props inherited from Layer class */
-  
-//   // autoHighlight: false,
-//   // coordinateOrigin: [0, 0, 0],
-//   // coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
-//   // highlightColor: [0, 0, 128, 128],
-//   // modelMatrix: null,
-//   // opacity: 1,
-//   pickable: true,
-//   // visible: true,
-//   // wrapLongitude: false,
-// });
-
-// new DeckGL({
-//   mapStyle: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-//   initialViewState: {
-//     longitude: -122.4,
-//     latitude: 37.74,
-//     zoom: 11,
-//     maxZoom: 20,
-//     pitch: 30,
-//     bearing: 0
-//   },
-//   controller: true,
-//   getTooltip: ({object}) => object && `${object.position.join(', ')}
-// Count: ${object.points.length}`,
-//   layers: [layer]
-// });
-  
